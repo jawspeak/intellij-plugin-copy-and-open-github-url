@@ -2,11 +2,18 @@
   <id>com.squareup.intellij.plugin.copy-as-github-path</id>
   <name>Copy &amp; Browse as Github Path</name>
   <version>1.0</version>
-  <vendor email="support@example.com" url="http://www.squareup.com">Square, Inc</vendor>
+  <vendor email="jaw@squareup.com" url="http://www.squareup.com">Square, Inc</vendor>
 
   <description><![CDATA[
       For projects with git repos in the base, it allows you to copy the current file's path on
-      master, and open that with the default browser.
+      master, and open that with the default browser.<br>
+
+      Handy when you want to quickly navigate to a file in Intellij and then share the github link
+      (including line number) with someone else.<br>
+
+      <a href="https://github.com/jawspeak/intellij-plugin-copy-and-open-github-url">
+      Github source</a> and issue tracker.
+      <br>
       ]]></description>
 
   <change-notes><![CDATA[
@@ -30,13 +37,14 @@
   </project-components>
 
   <actions>
-    <action id="com.squareup.intellij.CopyAndOpenGithubUrlForFile" class="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
+    <action id="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
+        class="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
         text="Copy url and open Github (master)"
         description="Copy and open the URL to this file in github, assuming the master branch">
-        <add-to-group group-id="EditorPopupMenu"/>
-        <add-to-group group-id="ProjectViewPopupMenu"/>
-        <add-to-group group-id="EditorTabPopupMenu"/>
-        <add-to-group group-id="ConsoleEditorPopupMenu"/>
+      <add-to-group group-id="EditorPopupMenu"/>
+      <add-to-group group-id="ProjectViewPopupMenu"/>
+      <add-to-group group-id="EditorTabPopupMenu"/>
+      <add-to-group group-id="ConsoleEditorPopupMenu"/>
     </action>
   </actions>
 
