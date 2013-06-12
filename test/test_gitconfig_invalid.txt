@@ -1,0 +1,16 @@
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+        ignorecase = true
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[branch "jaw/dry-up-code"]
+        remote = origin
+        merge = refs/heads/jaw/dry-up-code
+[branch "jaw/cleanup"]
+        remote = origin
+        merge = refs/heads/jaw/cleanup

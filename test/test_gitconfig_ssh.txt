@@ -1,0 +1,13 @@
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+        ignorecase = true
+[remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = git@git.squareup.com:square/java.git
+        tagopt = --no-tags
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
