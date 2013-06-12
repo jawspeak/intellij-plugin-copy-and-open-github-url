@@ -1,17 +1,16 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>com.squareup.intellij.plugin.copy-as-github-path</id>
+  <name>Copy &amp; Browse as Github Path</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="support@example.com" url="http://www.squareup.com">Square, Inc</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+      For projects with git repos in the base, it allows you to copy the current file's path on
+      master, and open that with the default browser.
       ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+      Initial release.<br>
       ]]>
   </change-notes>
 
@@ -20,9 +19,7 @@
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
-  <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
-  -->
 
   <application-components>
     <!-- Add your application components here -->
@@ -33,10 +30,9 @@
   </project-components>
 
   <actions>
-    <!-- Add your actions here -->
-
-    <action id="com.squareup.intellij.CopyGithubUrlPath" class="com.squareup.intellij.CopyGithubUrlPath"
-        text="Copy as Github URL (master)" description="Copy the URL to this file in github, assuming the master branch">
+    <action id="com.squareup.intellij.CopyAndOpenGithubUrlForFile" class="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
+        text="Copy &amp; open URL (on master)"
+        description="Copy and open the URL to this file in github, assuming the master branch">
         <add-to-group group-id="EditorPopupMenu"/>
         <add-to-group group-id="ProjectViewPopupMenu"/>
         <add-to-group group-id="EditorTabPopupMenu"/>

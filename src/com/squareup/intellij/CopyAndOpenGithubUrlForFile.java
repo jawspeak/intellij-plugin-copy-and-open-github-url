@@ -16,10 +16,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
+import java.awt.Desktop;
 import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-public class CopyGithubUrlPath extends AnAction {
-  private static final Logger LOG = Logger.getInstance("#" + CopyGithubUrlPath.class.getName());
+public class CopyAndOpenGithubUrlForFile extends AnAction {
+  private static final Logger LOG = Logger.getInstance("#" + CopyAndOpenGithubUrlForFile.class.getName());
 
   /**
    * MVP: copies current file name. then appropriate github prefix. If a line is selected, it
@@ -34,16 +38,28 @@ public class CopyGithubUrlPath extends AnAction {
     final VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
     Integer line = (editor != null)
         ? editor.getSelectionModel().getSelectionStartPosition().getLine() + 1 : null;
-    copyUrl(project, file, line);
+    String url = copyUrl(project, file, line);
+    openBrowser(url);
     showStatusBubble(event, file);
   }
 
-  private void copyUrl(Project project, VirtualFile file, Integer line) {
+  private String copyUrl(Project project, VirtualFile file, Integer line) {
     String basePath = project.getBasePath();
     GithubRepo githubRepo = new GithubRepo(basePath);
     String relativeFilePath = file.getCanonicalPath().replaceFirst(basePath, "");
     String url = githubRepo.repoUrlFor(relativeFilePath, line);
     CopyPasteManager.getInstance().setContents(new StringSelection(url));
+    return url;
+  }
+
+  private void openBrowser(String url) {
+    try {
+      Desktop.getDesktop().browse(new URI(url));
+    } catch (IOException e) {
+      LOG.error("Unable to open browser for url: " + url, e);
+    } catch (URISyntaxException e) {
+      LOG.error("Unable to open browser for url: " + url, e);
+    }
   }
 
   private void showStatusBubble(AnActionEvent event, VirtualFile file) {
@@ -54,7 +70,7 @@ public class CopyGithubUrlPath extends AnAction {
         .createHtmlTextBalloonBuilder(
             "<p>Github URL for '<tt>"
                 + file.getPresentableName()
-                + "</tt>' (on master branch) copied to your clipboard.</p>",
+                + "</tt> (on master branch) copied to your clipboard.</p>",
             MessageType.INFO, null)
         .setFadeoutTime(5500)
         .createBalloon()
