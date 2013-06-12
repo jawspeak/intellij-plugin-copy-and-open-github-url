@@ -31,7 +31,7 @@
 
   <actions>
     <action id="com.squareup.intellij.CopyAndOpenGithubUrlForFile" class="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
-        text="Copy &amp; open URL (on master)"
+        text="Copy url and open Github (master)"
         description="Copy and open the URL to this file in github, assuming the master branch">
         <add-to-group group-id="EditorPopupMenu"/>
         <add-to-group group-id="ProjectViewPopupMenu"/>
