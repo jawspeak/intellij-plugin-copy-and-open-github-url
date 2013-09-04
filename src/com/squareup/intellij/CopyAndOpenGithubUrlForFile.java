@@ -37,7 +37,9 @@ public class CopyAndOpenGithubUrlForFile extends AnAction {
     final Editor editor = event.getData(PlatformDataKeys.EDITOR);
     final VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
     Integer line = (editor != null)
-        ? editor.getSelectionModel().getSelectionStartPosition().getLine() + 1 : null;
+        // convert the VisualPosition to the LogicalPosition to have the correct line number.
+        // http://grepcode.com/file/repository.grepcode.com/java/ext/com.jetbrains/intellij-idea/10.0/com/intellij/openapi/editor/LogicalPosition.java#LogicalPosition
+        ? editor.visualToLogicalPosition(editor.getSelectionModel().getSelectionStartPosition()).line + 1 : null;
     String url = copyUrl(project, file, line);
     openBrowser(url);
     showStatusBubble(event, file);
