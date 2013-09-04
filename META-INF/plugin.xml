@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.squareup.intellij.plugin.copy-as-github-path</id>
   <name>Copy &amp; Browse as Github Path</name>
-  <version>1.0</version>
+  <version>1.1</version>
   <vendor email="jaw@squareup.com" url="http://www.squareup.com">Square, Inc</vendor>
 
   <description><![CDATA[
@@ -17,7 +17,8 @@
       ]]></description>
 
   <change-notes><![CDATA[
-      Initial release.<br>
+      1.0 Initial release.<br>
+      1.1 Fix a bug where the line numbers were incorrect if the file had any line folding in it.<br>
       ]]>
   </change-notes>
 
