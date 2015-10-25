@@ -1,5 +1,5 @@
 // Copyright 2013 Square, Inc.
-package com.squareup.intellij;
+package com.squareup.intellij.helper;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.BufferedReader;
@@ -10,30 +10,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Basic interfacing with .git/config configurations.
  */
-public class GithubRepo {
+public abstract class GitRepo {
   private static Pattern INI_CATEGORY = Pattern.compile("\\[\\s*(\\w+)[\\s'\"]+(\\w+)[\\s'\"]+\\]");
   private static Pattern URL_VALUE = Pattern.compile("\\s*url\\s*=\\s*([^\\s]*)\\.git");
   private final File gitConfigFile;
 
-  GithubRepo(String projectRoot) {
+  public GitRepo(String projectRoot) {
     this(projectRoot, ".git/config");
   }
 
-  @VisibleForTesting GithubRepo(String projectRoot, String gitconfig) {
+  @VisibleForTesting
+  public GitRepo(String projectRoot, String gitconfig) {
     gitConfigFile = new File(projectRoot, gitconfig);
   }
 
-  String repoUrlFor(String relativeFilePath) {
+  public abstract String brand();
+
+  /* Implement for different repository systems. */
+  abstract String buildUrlFor(String sanitizedUrlValue);
+
+  abstract String buildLineDomainPrefix();
+
+  public String repoUrlFor(String relativeFilePath) {
     return repoUrlFor(relativeFilePath, null);
   }
 
-  String repoUrlFor(String relativeFilePath, Integer line) {
-    return githubBaseUrl() + relativeFilePath + (line != null ? "#L" + line : "");
+  public String repoUrlFor(String relativeFilePath, Integer line) {
+    return gitBaseUrl() + relativeFilePath + (line != null ? buildLineDomainPrefix() + line : "");
   }
 
-  private String githubBaseUrl() {
+  private String gitBaseUrl() {
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new FileReader(gitConfigFile));
@@ -49,9 +57,9 @@ public class GithubRepo {
         }
         matcher = URL_VALUE.matcher(line);
         if (inRemoteOriginSection && matcher.matches()) {
-          return "https://" + matcher.group(1)
-              .replaceAll("git://|git@|https://", "")
-              .replaceAll(":", "/") + "/blob/master";
+          return buildUrlFor(matcher.group(1)
+              .replaceAll("ssh://|git://|git@|https://", "")
+              .replaceAll(":", "/"));
         }
       }
       throw new RuntimeException("Did not find [remote \"origin\"] url set in " + gitConfigFile);

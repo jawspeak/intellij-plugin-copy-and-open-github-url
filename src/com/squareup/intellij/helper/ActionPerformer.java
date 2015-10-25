@@ -1,7 +1,5 @@
-// Copyright 2013 Square, Inc.
-package com.squareup.intellij;
+package com.squareup.intellij.helper;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -22,8 +20,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class CopyAndOpenGithubUrlForFile extends AnAction {
-  private static final Logger LOG = Logger.getInstance("#" + CopyAndOpenGithubUrlForFile.class.getName());
+public class ActionPerformer {
+  private static final Logger LOG = Logger.getInstance("#" + ActionPerformer.class.getName());
+  private final GitRepo repo;
+
+  public ActionPerformer(GitRepo repo) {
+    this.repo = repo;
+  }
 
   /**
    * MVP: copies current file name. then appropriate github prefix. If a line is selected, it
@@ -47,9 +50,8 @@ public class CopyAndOpenGithubUrlForFile extends AnAction {
 
   private String copyUrl(Project project, VirtualFile file, Integer line) {
     String basePath = project.getBasePath();
-    GithubRepo githubRepo = new GithubRepo(basePath);
     String relativeFilePath = file.getCanonicalPath().replaceFirst(basePath, "");
-    String url = githubRepo.repoUrlFor(relativeFilePath, line);
+    String url = repo.repoUrlFor(relativeFilePath, line);
     CopyPasteManager.getInstance().setContents(new StringSelection(url));
     return url;
   }
@@ -70,7 +72,7 @@ public class CopyAndOpenGithubUrlForFile extends AnAction {
 
     JBPopupFactory.getInstance()
         .createHtmlTextBalloonBuilder(
-            "<p>Github URL for '<tt>"
+            "<p>" + repo.brand() + " URL for '<tt>"
                 + file.getPresentableName()
                 + "</tt> (on master branch) copied to your clipboard.</p>",
             MessageType.INFO, null)

@@ -1,55 +1,65 @@
 <idea-plugin version="2">
-  <id>com.squareup.intellij.plugin.copy-as-github-path</id>
-  <name>Copy &amp; Browse as Github Path</name>
-  <version>1.1</version>
-  <vendor email="jaw@squareup.com" url="http://www.squareup.com">Square, Inc</vendor>
+    <id>com.squareup.intellij.plugin.copy-as-github-path</id>
+    <name>Copy &amp; Browse as Github or Atlassian Stash Path</name>
+    <version>2.0</version>
+    <vendor email="jaw@squareup.com" url="http://www.squareup.com">Square, Inc</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
       For projects with git repos in the base, it allows you to copy the current file's path on
       master, and open that with the default browser.<br>
 
-      Handy when you want to quickly navigate to a file in Intellij and then share the github link
-      (including line number) with someone else.<br>
+      Handy when you want to quickly navigate to a file in Intellij and then copy the Github or
+      Atlassian Stash link (including line number) to share with someone else as a URL.<br>
 
       <a href="https://github.com/jawspeak/intellij-plugin-copy-and-open-github-url">
       Github source</a> and issue tracker.
       <br>
       ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       1.0 Initial release.<br>
       1.1 Fix a bug where the line numbers were incorrect if the file had any line folding in it.<br>
+      2.0 Rename to reflect added support for Stash repos with a second menu option that always pops up.
       ]]>
-  </change-notes>
+    </change-notes>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="107.105"/>
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="107.105"/>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <depends>com.intellij.modules.lang</depends>
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
 
-  <application-components>
-    <!-- Add your application components here -->
-  </application-components>
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
 
-  <project-components>
-    <!-- Add your project components here -->
-  </project-components>
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
 
-  <actions>
-    <action id="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
-        class="com.squareup.intellij.CopyAndOpenGithubUrlForFile"
-        text="Copy url and open Github (master)"
-        description="Copy and open the URL to this file in github, assuming the master branch">
-      <add-to-group group-id="EditorPopupMenu"/>
-      <add-to-group group-id="ProjectViewPopupMenu"/>
-      <add-to-group group-id="EditorTabPopupMenu"/>
-      <add-to-group group-id="ConsoleEditorPopupMenu"/>
-    </action>
-  </actions>
+    <actions>
+        <action id="com.squareup.intellij.StashCopyAndOpenUrlForFile"
+                class="com.squareup.intellij.StashCopyAndOpenUrlForFile"
+                text="Copy url and open Stash (master)"
+                description="Copy and open the URL to this file in Atlassian Stash, assuming the master branch">
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu"/>
+        </action>
+        <action id="com.squareup.intellij.GithubCopyAndOpenUrlForFile"
+                class="com.squareup.intellij.GithubCopyAndOpenUrlForFile"
+                text="Copy url and open Github (master)"
+                description="Copy and open the URL to this file in Github, assuming the master branch">
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu"/>
+        </action>
+    </actions>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
 </idea-plugin>
