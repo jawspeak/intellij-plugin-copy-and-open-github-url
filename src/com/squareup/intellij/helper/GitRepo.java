@@ -4,6 +4,7 @@ package com.squareup.intellij.helper;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -23,7 +24,8 @@ public abstract class GitRepo {
 
   @VisibleForTesting
   public GitRepo(String projectRoot, String gitconfig) {
-    gitConfigFile = new File(projectRoot, gitconfig);
+    String gitRoot = findDotGitFolder(new File(projectRoot));
+    gitConfigFile = new File(gitRoot, gitconfig);
   }
 
   public abstract String brand();
@@ -37,8 +39,25 @@ public abstract class GitRepo {
     return repoUrlFor(relativeFilePath, null);
   }
 
-  public String repoUrlFor(String relativeFilePath, Integer line) {
-    return gitBaseUrl() + relativeFilePath + (line != null ? buildLineDomainPrefix() + line : "");
+  public String repoUrlFor(String filePath, Integer line) {
+    filePath = filePath.replaceFirst(gitConfigFile.getParentFile().getParent(), "");
+    return gitBaseUrl() + filePath + (line != null ? buildLineDomainPrefix() + line : "");
+  }
+
+  String findDotGitFolder(File absolutePath) {
+    if (absolutePath.getParent() == null) {
+      throw new RuntimeException(
+          "Could not find parent .git/ folder. Maybe path is not in a git repo? " + absolutePath);
+    }
+    FileFilter gitFolderFinder = new FileFilter() {
+      @Override public boolean accept(File pathname) {
+        return pathname.getName().equals(".git");
+      }
+    };
+    if (absolutePath.listFiles(gitFolderFinder).length == 1) {
+      return absolutePath.getAbsolutePath();
+    }
+    return findDotGitFolder(absolutePath.getParentFile());
   }
 
   private String gitBaseUrl() {

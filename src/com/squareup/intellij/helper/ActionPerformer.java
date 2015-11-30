@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -36,22 +35,20 @@ public class ActionPerformer {
    * 1st).
    */
   public void actionPerformed(AnActionEvent event) {
-    Project project = event.getData(PlatformDataKeys.PROJECT);
     final Editor editor = event.getData(PlatformDataKeys.EDITOR);
     final VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
     Integer line = (editor != null)
         // convert the VisualPosition to the LogicalPosition to have the correct line number.
         // http://grepcode.com/file/repository.grepcode.com/java/ext/com.jetbrains/intellij-idea/10.0/com/intellij/openapi/editor/LogicalPosition.java#LogicalPosition
-        ? editor.visualToLogicalPosition(editor.getSelectionModel().getSelectionStartPosition()).line + 1 : null;
-    String url = copyUrl(project, file, line);
+        ? editor.visualToLogicalPosition(
+        editor.getSelectionModel().getSelectionStartPosition()).line + 1 : null;
+    String url = copyUrl(file, line);
     openBrowser(url);
     showStatusBubble(event, file);
   }
 
-  private String copyUrl(Project project, VirtualFile file, Integer line) {
-    String basePath = project.getBasePath();
-    String relativeFilePath = file.getCanonicalPath().replaceFirst(basePath, "");
-    String url = repo.repoUrlFor(relativeFilePath, line);
+  private String copyUrl(VirtualFile file, Integer line) {
+    String url = repo.repoUrlFor(file.getCanonicalPath(), line);
     CopyPasteManager.getInstance().setContents(new StringSelection(url));
     return url;
   }

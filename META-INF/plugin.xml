@@ -1,8 +1,10 @@
 <idea-plugin version="2">
     <id>com.squareup.intellij.plugin.copy-as-github-path</id>
     <name>Copy &amp; Browse as Github or Atlassian Stash Path</name>
-    <version>2.0</version>
-    <vendor email="jaw@squareup.com" url="http://www.squareup.com">Square, Inc</vendor>
+    <version>2.1</version>
+    <vendor url="https://github.com/jawspeak/intellij-plugin-copy-and-open-github-url">Jonathan
+        Wolter
+    </vendor>
 
     <description><![CDATA[
       For projects with git repos in the base, it allows you to copy the current file's path on
@@ -20,6 +22,7 @@
       1.0 Initial release.<br>
       1.1 Fix a bug where the line numbers were incorrect if the file had any line folding in it.<br>
       2.0 Rename to reflect added support for Stash repos with a second menu option that always pops up.
+      2.1 Fix bug if the project folder is not the root .git folder.
       ]]>
     </change-notes>
 
