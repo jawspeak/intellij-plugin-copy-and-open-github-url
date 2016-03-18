@@ -27,6 +27,12 @@ public class StashRepo extends GitRepo {
     String project = chunks[1].toUpperCase();
     String repo = chunks[2];
 
+    // bitbucket server urls might be like "http://domain.com/scm/project/repo.git"
+    if(project.equals("SCM")) {
+      project = chunks[2].toUpperCase();
+      repo = chunks[3];
+    }
+
     return "https://" + Joiner.on('/').join(domain, "projects", project, "repos", repo, "browse");
   }
 
