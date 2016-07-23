@@ -18,8 +18,11 @@ public class GithubRepo extends GitRepo {
   }
 
   @Override
-  protected String buildUrlFor(String sanitizedUrlValue) {
-    return "https://" + sanitizedUrlValue + "/blob/master";
+  protected String buildUrlFor(String originUrl) {
+    final String domainAndContextpath = originUrl
+            .replaceAll("ssh://|git://|git@|https://", "")
+            .replaceAll(":", "/");
+    return "https://" + domainAndContextpath + "/blob/master";
 
   }
 

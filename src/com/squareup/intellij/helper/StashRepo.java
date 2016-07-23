@@ -2,6 +2,10 @@ package com.squareup.intellij.helper;
 
 import com.google.common.base.Joiner;
 
+import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+
 /**
  * Url builder for atlassian stash repos.
  */
@@ -21,13 +25,15 @@ public class StashRepo extends GitRepo {
   }
 
   @Override
-  protected String buildUrlFor(String sanitizedUrlValue) {
-    String[] chunks = sanitizedUrlValue.split("/");
-    String domain = chunks[0];
-    String project = chunks[1].toUpperCase();
-    String repo = chunks[2];
-
-    return "https://" + Joiner.on('/').join(domain, "projects", project, "repos", repo, "browse");
+  protected String buildUrlFor(String originUrl) {
+    final String domainAndPath = originUrl.replaceAll("ssh://|git://|git@|https://", "");
+    final String[] domainAndPathParts = domainAndPath.split("/");
+    final ArrayDeque<String> partDeque = new ArrayDeque<String>(Arrays.asList(domainAndPathParts));
+    final String repo = partDeque.pollLast();
+    final String project = partDeque.pollLast().toUpperCase();
+    final String domainAndContextPath = Joiner.on("/").join(partDeque);
+    final String browsePath = Joiner.on('/').join(domainAndContextPath, "projects", project, "repos", repo, "browse");
+    return URI.create("https://" + browsePath).toASCIIString();
   }
 
   @Override

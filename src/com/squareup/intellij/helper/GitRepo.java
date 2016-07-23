@@ -2,6 +2,7 @@
 package com.squareup.intellij.helper;
 
 import com.google.common.annotations.VisibleForTesting;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -31,7 +32,7 @@ public abstract class GitRepo {
   public abstract String brand();
 
   /* Implement for different repository systems. */
-  abstract String buildUrlFor(String sanitizedUrlValue);
+  abstract String buildUrlFor(String originUrl);
 
   abstract String buildLineDomainPrefix();
 
@@ -40,7 +41,7 @@ public abstract class GitRepo {
   }
 
   public String repoUrlFor(String filePath, Integer line) {
-    filePath = filePath.replaceFirst(gitConfigFile.getParentFile().getParent(), "");
+    filePath = filePath.replaceFirst(Pattern.quote(gitConfigFile.getParentFile().getParent()), "");
     return gitBaseUrl() + filePath + (line != null ? buildLineDomainPrefix() + line : "");
   }
 
@@ -76,9 +77,7 @@ public abstract class GitRepo {
         }
         matcher = URL_VALUE.matcher(line);
         if (inRemoteOriginSection && matcher.matches()) {
-          return buildUrlFor(matcher.group(1)
-              .replaceAll("ssh://|git://|git@|https://", "")
-              .replaceAll(":", "/"));
+          return buildUrlFor(matcher.group(1));
         }
       }
       throw new RuntimeException("Did not find [remote \"origin\"] url set in " + gitConfigFile);
