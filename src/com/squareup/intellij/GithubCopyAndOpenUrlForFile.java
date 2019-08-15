@@ -11,6 +11,6 @@ public class GithubCopyAndOpenUrlForFile extends AnAction {
   @Override
   public void actionPerformed(AnActionEvent event) {
     Project project = event.getData(PlatformDataKeys.PROJECT);
-    new ActionPerformer(new GithubRepo(project.getBasePath())).actionPerformed(event);
+    new ActionPerformer(new GithubRepo(project.getBasePath())).actionPerformed(event, true);
   }
 }

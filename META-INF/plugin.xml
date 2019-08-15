@@ -51,6 +51,15 @@
             <add-to-group group-id="EditorTabPopupMenu"/>
             <add-to-group group-id="ConsoleEditorPopupMenu"/>
         </action>
+        <action id="com.squareup.intellij.StashCopyForFile"
+            class="com.squareup.intellij.StashCopyForFile"
+            text="Copy url Stash (master)"
+            description="Copy the URL to this file in Atlassian Stash, assuming the master branch">
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu"/>
+        </action>
         <action id="com.squareup.intellij.GithubCopyAndOpenUrlForFile"
                 class="com.squareup.intellij.GithubCopyAndOpenUrlForFile"
                 text="Copy url and open Github (master)"

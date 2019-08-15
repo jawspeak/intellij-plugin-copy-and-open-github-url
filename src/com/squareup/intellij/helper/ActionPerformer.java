@@ -34,7 +34,7 @@ public class ActionPerformer {
    * By design it does not support: branches, folders, or multiple files selected (it picks the
    * 1st).
    */
-  public void actionPerformed(AnActionEvent event) {
+  public void actionPerformed(AnActionEvent event, boolean doOpen) {
     final Editor editor = event.getData(PlatformDataKeys.EDITOR);
     final VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
     Integer line = (editor != null)
@@ -43,7 +43,9 @@ public class ActionPerformer {
         ? editor.visualToLogicalPosition(
         editor.getSelectionModel().getSelectionStartPosition()).line + 1 : null;
     String url = copyUrl(file, line);
-    openBrowser(url);
+    if (doOpen) {
+      openBrowser(url);
+    }
     showStatusBubble(event, file);
   }
 
